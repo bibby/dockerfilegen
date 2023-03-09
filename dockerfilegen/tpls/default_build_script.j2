@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+{% for d in generated_files %}
+## {{ d.tag }} ##
+
+echo -e "\nPulling base {{ d.base }} ...\n"
+docker pull {{ d.base }}
+
+echo -e "\nBuilding {{ d.image }}:{{ d.tag }} ...\n"
+docker build -t {{ d.image }}:{{ d.tag }} -f {{ d.dockerfile }} {{ path }}
+
+{% if tag_registry %}
+echo -e "\nTagging {{ d.image }}:{{ d.tag }} ...\n"
+docker tag -f {{ d.image }}:{{ d.tag }} {{ tag_registry }}/{{ d.image }}:{{ d.tag }}
+{% if push %}
+echo -e "\nPushing {{ tag_registry }}/{{ d.image }}:{{ d.tag }} ...\n"
+docker push {{ tag_registry }}/{{ d.image }}:{{ d.tag }}
+{% endif %}
+{% endif %}
+{% endfor %}

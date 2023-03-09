@@ -1,0 +1,15 @@
+FROM {{ base }}
+{% if maintainer %}
+MAINTAINER {{ maintainer }}
+{%  endif %}
+
+{% block first %}{% endblock %}
+{% block env %}{% endblock %}
+{% block volume %}{% endblock %}
+
+{% block pre_procedure %}{% endblock %}
+{% block procedure %}{% endblock %}
+{% block post_procedure %}{% endblock %}
+
+{% block cmd %}{% endblock %}
+{% block last %}{% endblock %}
